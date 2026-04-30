@@ -9,10 +9,10 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.30.0",
+    "@anthropic-ai/sdk": "^0.91.0",
     "@prsnt/algorithm": "workspace:*",
     "@prsnt/secret-santa": "workspace:*",
     "fastify": "^5.0.0",

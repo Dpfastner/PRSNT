@@ -12,8 +12,33 @@ export type {
 
 export {
   IDEATION_SYSTEM_PROMPT,
-  buildIdeationUserMessage,
+  VALID_CATEGORIES,
+  buildProfilePrefix,
+  buildOccasionMessage,
 } from './prompts/ideation.js';
+
+export {
+  RERANK_SYSTEM_PROMPT,
+  buildRerankUserMessage,
+} from './prompts/rerank.js';
+
+export {
+  filterCategoriesUpfront,
+  filterConcepts,
+  rejectConcept,
+  type FilterContext,
+} from './filters.js';
+
+export {
+  NoopCatalogProvider,
+  type CatalogProvider,
+} from './catalog.js';
+
+export {
+  ClaudePipeline,
+  type ClaudePipelineOptions,
+  type SuggestArgs,
+} from './pipeline.js';
 
 import type {
   Profile,
@@ -26,5 +51,6 @@ export interface SuggestionPipeline {
     profile: Profile;
     occasion: OccasionContext;
     pastGifts?: string[];
+    ageYears?: number;
   }): Promise<RankedSuggestion[]>;
 }
