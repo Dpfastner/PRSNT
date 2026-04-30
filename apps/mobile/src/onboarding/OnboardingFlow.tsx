@@ -18,7 +18,11 @@ import {
 } from './types';
 
 interface Props {
-  onComplete: (result: { userId: string; profileId: string }) => void;
+  onComplete: (result: {
+    userId: string;
+    profileId: string;
+    displayName: string;
+  }) => void;
 }
 
 const TOTAL = STEP_ORDER.length;
@@ -56,14 +60,15 @@ export function OnboardingFlow({ onComplete }: Props) {
 
     setSubmitting(true);
     try {
+      const displayName = state.displayName.trim();
       const result = await postOnboarding({
-        displayName: state.displayName.trim(),
+        displayName,
         birthday,
         partyStyle: state.partyStyle,
         giftCategoriesLiked: state.giftCategoriesLiked,
         wontBuySelf,
       });
-      onComplete(result);
+      onComplete({ ...result, displayName });
     } catch (err) {
       setError((err as Error).message);
       setSubmitting(false);

@@ -1,43 +1,52 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView, StyleSheet } from 'react-native';
-import { Welcome } from './src/screens/Welcome';
-import { Done } from './src/screens/Done';
-import { OnboardingFlow } from './src/onboarding/OnboardingFlow';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { RootNavigator } from './src/navigation/RootNavigator';
+import { loadSession, saveSession, type Session } from './src/storage/session';
 import { colors } from './src/theme';
 
-type AppState =
-  | { kind: 'welcome' }
-  | { kind: 'onboarding' }
-  | { kind: 'done'; userId: string };
-
 export default function App() {
-  const [state, setState] = useState<AppState>({ kind: 'welcome' });
+  const [bootstrapping, setBootstrapping] = useState(true);
+  const [session, setSession] = useState<Session | null>(null);
+
+  useEffect(() => {
+    loadSession()
+      .then((s) => setSession(s))
+      .finally(() => setBootstrapping(false));
+  }, []);
+
+  async function onSessionEstablished(s: Session) {
+    await saveSession(s);
+    setSession(s);
+  }
+
+  if (bootstrapping) {
+    return (
+      <View style={styles.boot}>
+        <ActivityIndicator color={colors.primary} />
+        <StatusBar style="dark" />
+      </View>
+    );
+  }
 
   return (
-    <SafeAreaView style={styles.root}>
-      {state.kind === 'welcome' && (
-        <Welcome onStart={() => setState({ kind: 'onboarding' })} />
-      )}
-      {state.kind === 'onboarding' && (
-        <OnboardingFlow
-          onComplete={({ userId }) => setState({ kind: 'done', userId })}
-        />
-      )}
-      {state.kind === 'done' && (
-        <Done
-          userId={state.userId}
-          onRestart={() => setState({ kind: 'welcome' })}
-        />
-      )}
+    <SafeAreaProvider>
+      <RootNavigator
+        session={session}
+        onSessionEstablished={onSessionEstablished}
+        onSignOut={() => setSession(null)}
+      />
       <StatusBar style="dark" />
-    </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 
 const styles = StyleSheet.create({
-  root: {
+  boot: {
     flex: 1,
     backgroundColor: colors.background,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
