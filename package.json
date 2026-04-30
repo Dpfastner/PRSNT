@@ -1,0 +1,19 @@
+{
+  "name": "prsnt",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Codename for a gift-giving app. See docs/STRATEGY.md.",
+  "scripts": {
+    "dev": "pnpm --parallel --filter \"./apps/*\" dev",
+    "test": "pnpm --recursive test",
+    "typecheck": "pnpm --recursive typecheck",
+    "lint": "pnpm --recursive lint"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "pnpm@10.0.0",
+  "devDependencies": {
+    "typescript": "^5.5.0"
+  }
+}
