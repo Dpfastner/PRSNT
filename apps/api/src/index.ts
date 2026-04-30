@@ -1,6 +1,7 @@
 import Fastify from 'fastify';
 import { createDatabase } from './db/client.js';
 import { registerEventRoutes } from './routes/events.js';
+import { registerOnboardingRoutes } from './routes/onboarding.js';
 import {
   createPipelineFromEnv,
   registerSuggestionRoutes,
@@ -20,6 +21,7 @@ app.get('/health', async () => ({
 }));
 
 if (db) {
+  registerOnboardingRoutes(app, db);
   registerEventRoutes(app, db);
   if (pipeline) {
     registerSuggestionRoutes(app, db, pipeline);
@@ -27,7 +29,7 @@ if (db) {
     app.log.warn('ANTHROPIC_API_KEY not set; /suggestions disabled');
   }
 } else {
-  app.log.warn('DATABASE_URL not set; /events and /suggestions disabled');
+  app.log.warn('DATABASE_URL not set; /onboarding, /events, /suggestions disabled');
 }
 
 const port = Number(process.env.PORT ?? 3000);
