@@ -23,6 +23,9 @@ importers:
       '@prsnt/secret-santa':
         specifier: workspace:*
         version: link:../../packages/secret-santa
+      dotenv:
+        specifier: ^16.4.0
+        version: 16.4.7
       drizzle-orm:
         specifier: ^0.36.0
         version: 0.36.4(@types/pg@8.20.0)(@types/react@18.3.28)(pg@8.20.0)(react@18.3.1)

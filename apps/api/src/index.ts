@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import Fastify from 'fastify';
 import { createDatabase } from './db/client.js';
 import { registerEventRoutes } from './routes/events.js';
